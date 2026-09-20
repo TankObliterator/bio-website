@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bio | TankObliterator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --card-bg: rgba(10, 10, 10, 0.75);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --accent-color: #ff3e3e;
+
+            --proton-purple: #6d4aff;
+            --discord-blurple: #5865F2;
+            --github-white: #ffffff;
+            --yt-music-red: #ff0000;
+
+            --vh: 100vh;
+            /* fallback */
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: var(--vh);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background-color: #000;
+        }
+
+        /* Background Video Grid */
+        #video-grid {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw;
+            height: calc(100vw * 9 / 16);
+            max-height: var(--vh);
+            max-width: calc(var(--vh) * 16 / 9);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            z-index: 0;
+            background-color: #000;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+        }
+
+        .bg-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Fade Layer */
+        .local-fader {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            opacity: 1;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            #video-grid {
+                display: none;
+            }
+
+            body {
+                background-color: #0a0a0a;
+                background-image: radial-gradient(circle at top, #1a1a1a, #000);
+            }
+        }
+
+        /* Main Layout */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            min-height: var(--vh);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .container {
+            text-align: center;
+            padding: 3.5rem 2.5rem;
+            border-radius: 32px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
+            max-width: 400px;
+            width: 100%;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-color);
+            margin-bottom: 1.2rem;
+            object-fit: cover;
+        }
+
+        h1 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin: 0;
+            color: var(--text-primary);
+            letter-spacing: -1px;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 12px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white !important;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1.5px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.2s ease, background 0.2s ease;
+            cursor: pointer;
+            width: 100%;
+            font-family: inherit;
+            text-align: left;
+        }
+
+        .btn i {
+            font-size: 1.4rem;
+            width: 25px;
+            text-align: center;
+        }
+
+        .btn-email {
+            border-color: rgba(109, 74, 255, 0.4);
+        }
+
+        .btn-email i {
+            color: var(--proton-purple);
+        }
+
+        .btn-discord {
+            border-color: rgba(88, 101, 242, 0.5);
+        }
+
+        .btn-discord i {
+            color: var(--discord-blurple);
+        }
+
+        .btn-github {
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-github i {
+            color: var(--github-white);
+        }
+
+        .btn-music {
+            border-color: rgba(255, 0, 0, 0.4);
+        }
+
+        .btn-music i {
+            color: var(--yt-music-red);
+        }
+
+        .btn:hover {
+            transform: translateX(8px);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        @media (max-height: 700px) {
+            .container {
+                padding: 2.5rem 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="video-grid">
+        <div class="video-container">
+            <video class="bg-video" autoplay muted playsinline preload="auto"></video>
+            <div class="local-fader"></div>
+        </div>
+        <div class="video-container">
+            <video class="bg-video" autoplay muted playsinline preload="auto"></video>
+            <div class="local-fader"></div>
+        </div>
+        <div class="video-container">
+            <video class="bg-video" autoplay muted playsinline preload="auto"></video>
+            <div class="local-fader"></div>
+        </div>
+        <div class="video-container">
+            <video class="bg-video" autoplay muted playsinline preload="auto"></video>
+            <div class="local-fader"></div>
+        </div>
+    </div>
+    <script>
+        // Initialize random videos immediately to start downloading ASAP
+        const BACKGROUND_VIDEO_URLS = [
+            'https://files.tankobliterator.net/public/api/resources/download?hash=Q7BPrRdjx7P3VCpE7EoHog&inline=true',
+            'https://files.tankobliterator.net/public/api/resources/download?hash=xMnS-q5zwYD9ar7VRI1ZYQ&inline=true',
+            'https://files.tankobliterator.net/public/api/resources/download?hash=uNrk8sAzxn17FYAVKAqY0A&inline=true',
+            'https://files.tankobliterator.net/public/api/resources/download?hash=aJJH_Nhg74QR2yMm2-9t6A&inline=true',
+            'https://files.tankobliterator.net/public/api/resources/download?hash=l3pxv9euOJJRekakuh04WQ&inline=true',
+            'https://files.tankobliterator.net/public/api/resources/download?hash=_juNpW_pXJfWT8zWtxL5ZA&inline=true',
+            'https://files.tankobliterator.net/public/api/resources/download?hash=0JA_b_H_Rg-FKxcqJj6t3g&inline=true'
+        ];
+
+        window.INITIAL_BG_VIDEOS = [];
+        if (window.innerWidth > 768) {
+            const vidsElements = document.querySelectorAll('.bg-video');
+            vidsElements.forEach((vid) => {
+                const randomVid = Math.floor(Math.random() * 7);
+                window.INITIAL_BG_VIDEOS.push(randomVid);
+                vid.src = BACKGROUND_VIDEO_URLS[randomVid];
+            });
+        }
+    </script>
+
+    <div class="main-content">
+        <div class="container">
+            <img src="pfp.png" alt="TankObliterator" class="avatar">
+            <h1>TankObliterator</h1>
+
+            <div class="social-links">
+                <button class="btn btn-email" id="copy-email" data-email="tankobliterator@proton.me">
+                    <i class="fa-solid fa-envelope"></i> <span>Email</span>
+                </button>
+
+                <a href="https://discordapp.com/users/770786220283396106" target="_blank" class="btn btn-discord">
+                    <i class="fa-brands fa-discord"></i> Discord
+                </a>
+
+                <a href="https://github.com/TankObliterator" target="_blank" class="btn btn-github">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+
+                <a href="https://music.youtube.com/playlist?list=PLwyG87_FVRn5h0odtHYKHbyUZG0guIRai" target="_blank"
+                    class="btn btn-music">
+                    <i class="fa-solid fa-list-ul"></i> My Playlist
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log("Yes this site was codded/themed with AI. All media was created or captured by me though.");
+
+        /* True viewport height fix */
+        function setViewportHeight() {
+            document.documentElement.style.setProperty('--vh', window.innerHeight + 'px');
+        }
+
+        setViewportHeight();
+        window.addEventListener('resize', setViewportHeight);
+
+        /* Background video logic */
+        const videos = document.querySelectorAll('.bg-video');
+        const totalVideos = BACKGROUND_VIDEO_URLS.length;
+
+        if (window.innerWidth > 768) {
+            videos.forEach((video, index) => {
+                const fader = video.nextElementSibling;
+                let lastIndex = window.INITIAL_BG_VIDEOS ? window.INITIAL_BG_VIDEOS[index] : -1;
+
+                function handleVideoReady() {
+                    video.play().catch(e => console.log("Autoplay prevented:", e));
+                    fader.style.opacity = "0";
+                }
+
+                // Use multiple events for best performance and least stuttering
+                video.addEventListener('canplaythrough', handleVideoReady);
+                video.addEventListener('canplay', handleVideoReady);
+
+                function playNextVideo() {
+                    let randomIndex;
+                    do {
+                        randomIndex = Math.floor(Math.random() * totalVideos);
+                    } while (randomIndex === lastIndex && totalVideos > 1);
+
+                    lastIndex = randomIndex;
+                    fader.style.opacity = "1";
+
+                    setTimeout(() => {
+                        video.src = BACKGROUND_VIDEO_URLS[randomIndex];
+                        video.load();
+
+                        const onNextReady = () => {
+                            handleVideoReady();
+                            video.removeEventListener('canplaythrough', onNextReady);
+                            video.removeEventListener('canplay', onNextReady);
+                        };
+
+                        video.addEventListener('canplaythrough', onNextReady);
+                        video.addEventListener('canplay', onNextReady);
+                    }, 500); // Wait for the fade to black
+                }
+
+                video.onended = playNextVideo;
+            });
+            document.addEventListener('click', () => {
+                videos.forEach(video => {
+                    if (video.paused) video.play();
+                });
+            }, { once: true });
+        }
+
+        // Copy email logic
+        const emailBtn = document.getElementById('copy-email');
+        if (emailBtn) {
+            let copyTimeout;
+            const span = emailBtn.querySelector('span');
+            const icon = emailBtn.querySelector('i');
+            const originalText = span.textContent;
+            const originalIconClass = icon.className;
+
+            emailBtn.addEventListener('click', () => {
+                const email = emailBtn.getAttribute('data-email');
+                navigator.clipboard.writeText(email).then(() => {
+                    span.textContent = 'Copied!';
+                    icon.className = 'fa-solid fa-check';
+
+                    clearTimeout(copyTimeout);
+                    copyTimeout = setTimeout(() => {
+                        span.textContent = originalText;
+                        icon.className = originalIconClass;
+                    }, 2000);
+                });
+            });
+        }
+    </script>
+
+</body>
+
+</html>
